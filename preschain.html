@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PresençaChain — Assembleia da República</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --green-dark: #0d4a0d;
+    --green-mid: #1a6b1a;
+    --green-light: #2d8b2d;
+    --green-pale: #e8f5e8;
+    --green-palest: #f4fbf4;
+    --gold: #c8920a;
+    --gold-pale: #fff8e6;
+    --red: #c0392b;
+    --red-pale: #fef0ef;
+    --amber: #d35400;
+    --amber-pale: #fff3e6;
+    --blue: #1a4a7a;
+    --blue-pale: #e8f0fa;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #adb5bd;
+    --gray-500: #6c757d;
+    --gray-700: #343a40;
+    --gray-900: #1a1a2e;
+    --white: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    background: #f0f4f0;
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ─── TOPBAR ─── */
+  .topbar {
+    background: var(--green-dark);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .ar-seal {
+    width: 38px; height: 38px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 13px; color: var(--white);
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+  .topbar-title { color: var(--white); font-size: 16px; font-weight: 600; }
+  .topbar-sub { color: rgba(255,255,255,0.6); font-size: 11px; margin-top: 1px; }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .network-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px; font-family: 'IBM Plex Mono', monospace;
+    padding: 4px 12px; border-radius: 20px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .net-dot {
+    width: 7px; height: 7px;
+    background: #4caf50; border-radius: 50%;
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .block-counter { color: rgba(255,255,255,0.5); font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
+
+  /* ─── NAV TABS ─── */
+  .nav-tabs {
+    background: var(--white);
+    border-bottom: 2px solid var(--gray-200);
+    display: flex;
+    padding: 0 24px;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 13px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--green-mid); }
+  .nav-tab.active { color: var(--green-dark); border-bottom-color: var(--green-dark); }
+
+  /* ─── CONTENT VIEWS ─── */
+  .view { display: none; padding: 20px 24px; max-width: 1100px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* ─── SECTION HEADER ─── */
+  .page-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .page-title { font-size: 22px; font-weight: 600; color: var(--gray-900); }
+  .page-desc { font-size: 13px; color: var(--gray-500); margin-top: 4px; line-height: 1.5; }
+
+  /* ─── GRID LAYOUTS ─── */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .grid-full { grid-column: 1 / -1; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .card-label {
+    font-size: 11px; font-weight: 600; color: var(--gray-400);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* ─── STAT CARDS ─── */
+  .stat-big { font-size: 36px; font-weight: 600; line-height: 1; }
+  .stat-sub { font-size: 12px; color: var(--gray-500); margin-top: 5px; }
+  .stat-green { color: var(--green-mid); }
+  .stat-red { color: var(--red); }
+  .stat-amber { color: var(--amber); }
+
+  /* ─── BADGES ─── */
+  .badge {
+    font-size: 11px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .badge-live { background: var(--red-pale); color: var(--red); }
+  .badge-ok { background: var(--green-pale); color: var(--green-dark); }
+  .badge-warn { background: var(--amber-pale); color: var(--amber); }
+  .badge-info { background: var(--blue-pale); color: var(--blue); }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-live .badge-dot { animation: blink 1s infinite; }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-wrap { margin-top: 14px; }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); margin-bottom: 5px; }
+  .progress-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: var(--green-light); transition: width 1.5s cubic-bezier(0.4,0,0.2,1); }
+  .progress-fill.warning { background: var(--gold); }
+
+  /* ─── DEPUTY LIST ─── */
+  .dep-list { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; padding-right: 4px; }
+  .dep-list::-webkit-scrollbar { width: 4px; }
+  .dep-list::-webkit-scrollbar-track { background: var(--gray-100); }
+  .dep-list::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 2px; }
+  .dep-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--gray-100);
+    transition: border-color 0.2s;
+  }
+  .dep-row:hover { border-color: var(--green-light); }
+  .dep-row.new-entry {
+    background: var(--green-pale);
+    border-color: var(--green-light);
+    animation: slideDown 0.4s ease;
+  }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .dep-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; flex-shrink: 0;
+  }
+  .dep-info { flex: 1; min-width: 0; }
+  .dep-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dep-meta { font-size: 11px; color: var(--gray-500); margin-top: 1px; }
+  .dep-status-col { text-align: right; flex-shrink: 0; }
+  .dep-status { font-size: 12px; font-weight: 500; }
+  .dep-hash { font-size: 10px; color: var(--gray-400); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+  .s-present { color: var(--green-mid); }
+  .s-absent { color: var(--red); }
+  .s-pending { color: var(--amber); }
+
+  /* ─── REGISTER PANEL ─── */
+  .wallet-box {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .wallet-icon {
+    width: 40px; height: 40px;
+    background: var(--green-dark); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white); font-size: 16px; font-weight: 600; flex-shrink: 0;
+  }
+  .wallet-name { font-size: 14px; font-weight: 500; }
+  .wallet-addr { font-size: 11px; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+  .wallet-circle { font-size: 11px; color: var(--green-mid); margin-top: 2px; }
+
+  .reg-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--green-dark);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px; font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600; cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .reg-btn:hover:not(:disabled) { background: var(--green-light); }
+  .reg-btn:active:not(:disabled) { transform: scale(0.98); }
+  .reg-btn:disabled { background: var(--gray-300); cursor: not-allowed; color: var(--gray-500); }
+  .reg-btn.success { background: var(--green-mid); }
+
+  .tx-panel { margin-top: 16px; display: none; }
+  .tx-step {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .tx-step:last-child { border-bottom: none; }
+  .tx-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .tx-icon.wait { background: var(--gray-200); color: var(--gray-400); }
+  .tx-icon.spin { background: var(--blue-pale); color: var(--blue); animation: rotate 1s linear infinite; }
+  .tx-icon.done { background: var(--green-pale); color: var(--green-dark); }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .tx-label { font-size: 13px; font-weight: 500; color: var(--gray-700); }
+  .tx-detail { font-size: 11px; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; margin-top: 3px; word-break: break-all; }
+  .tx-detail.success { color: var(--green-mid); }
+
+  /* ─── AUDIT TRAIL ─── */
+  .audit-list { display: flex; flex-direction: column; gap: 8px; }
+  .audit-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--gray-100);
+    transition: all 0.3s;
+  }
+  .audit-row.new-entry {
+    background: var(--green-pale);
+    border-color: var(--green-light);
+    animation: slideDown 0.4s ease;
+  }
+  .block-num {
+    background: var(--gray-700);
+    color: var(--white);
+    font-size: 10px; font-family: 'IBM Plex Mono', monospace;
+    padding: 4px 8px; border-radius: 4px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .audit-body { flex: 1; min-width: 0; }
+  .audit-name { font-size: 13px; font-weight: 500; }
+  .audit-tx { font-size: 10px; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .audit-meta { display: flex; gap: 8px; margin-top: 5px; align-items: center; flex-wrap: wrap; }
+  .audit-right { text-align: right; flex-shrink: 0; }
+  .audit-time { font-size: 12px; color: var(--gray-500); font-family: 'IBM Plex Mono', monospace; }
+
+  /* ─── SMART CONTRACT VIEW ─── */
+  .sc-wrapper {
+    background: #1e1e2e;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .sc-toolbar {
+    background: #2d2d3f;
+    padding: 10px 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sc-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .sc-title { font-size: 12px; color: rgba(255,255,255,0.5); font-family: 'IBM Plex Mono', monospace; margin-left: auto; }
+  .sc-body { padding: 20px 24px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; }
+  .kw { color: #c792ea; }
+  .kw2 { color: #82aaff; }
+  .fn { color: #82aaff; }
+  .fn2 { color: #c3e88d; }
+  .str { color: #c3e88d; }
+  .num { color: #f78c6c; }
+  .cm { color: #546e7a; font-style: italic; }
+  .ev { color: #ffcb6b; }
+  .typ { color: #ffcb6b; }
+  .plain { color: #cdd3de; }
+
+  /* ─── FLOW DIAGRAM ─── */
+  .flow-container { overflow-x: auto; }
+  .flow { display: flex; align-items: flex-start; gap: 0; padding: 10px 0; min-width: 700px; }
+  .flow-step {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    position: relative;
+  }
+  .flow-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px; top: 30px;
+    font-size: 18px; color: var(--gray-400);
+    font-weight: 300;
+  }
+  .flow-icon {
+    width: 60px; height: 60px;
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 8px;
+    border: 2px solid transparent;
+  }
+  .flow-step-title { font-size: 12px; font-weight: 600; text-align: center; color: var(--gray-700); }
+  .flow-step-desc { font-size: 11px; color: var(--gray-500); text-align: center; margin-top: 4px; line-height: 1.4; max-width: 110px; }
+  .fi-green { background: var(--green-pale); border-color: var(--green-light); }
+  .fi-blue { background: var(--blue-pale); border-color: var(--blue); }
+  .fi-gold { background: var(--gold-pale); border-color: var(--gold); }
+  .fi-red { background: var(--red-pale); border-color: var(--red); }
+  .fi-gray { background: var(--gray-200); border-color: var(--gray-300); }
+
+  /* ─── COMPARISON TABLE ─── */
+  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  .compare-table th {
+    background: var(--gray-100);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600; font-size: 12px;
+    color: var(--gray-500);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 2px solid var(--gray-200);
+  }
+  .compare-table td { padding: 11px 14px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--gray-100); }
+  .col-problem { color: var(--red); }
+  .col-solution { color: var(--green-mid); }
+
+  /* ─── TOOLTIP ─── */
+  .tooltip-box {
+    background: var(--gray-900); color: var(--white);
+    font-size: 12px; padding: 8px 12px; border-radius: 6px;
+    position: fixed; z-index: 999; max-width: 260px; line-height: 1.5;
+    pointer-events: none; display: none; box-shadow: var(--shadow-md);
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center; padding: 20px;
+    font-size: 11px; color: var(--gray-400);
+    border-top: 1px solid var(--gray-200);
+    margin-top: 30px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .flow { gap: 4px; }
+    .topbar-title { font-size: 13px; }
+    .block-counter { display: none; }
+    .view { padding: 14px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Tooltip -->
+<div class="tooltip-box" id="tooltip"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="ar-seal">AR</div>
+    <div>
+      <div class="topbar-title">PresençaChain</div>
+      <div class="topbar-sub">Assembleia da República · Blockchain Demo</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="network-badge">
+      <div class="net-dot"></div>
+      Ethereum Sepolia
+    </div>
+    <div class="block-counter">Bloco #<span id="blocknum">7.423.891</span></div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <div class="nav-tab active" onclick="showView('dashboard')">📊 Dashboard</div>
+  <div class="nav-tab" onclick="showView('registro')">✍️ Registar Presença</div>
+  <div class="nav-tab" onclick="showView('auditoria')">🔍 Auditoria Blockchain</div>
+  <div class="nav-tab" onclick="showView('contrato')">📜 Smart Contract</div>
+  <div class="nav-tab" onclick="showView('fluxo')">🔄 Fluxo & Comparação</div>
+</div>
+
+<!-- ═══════════════════════════ VIEW: DASHBOARD ═══════════════════════════ -->
+<div id="view-dashboard" class="view active">
+  <div class="page-header">
+    <div class="page-title">Sessão Plenária em Curso</div>
+    <div class="page-desc">Segunda-feira, 28 de Abril de 2026 · XVII Legislatura · Período da Tarde · 14h00–18h00</div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:14px;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Deputados Presentes</div>
+        <div class="badge badge-ok"><div class="badge-dot"></div>Registados</div>
+      </div>
+      <div class="stat-big stat-green" id="count-present">143</div>
+      <div class="stat-sub">de 230 · <span style="color:var(--green-mid)">62.2%</span> do hemiciclo</div>
+      <div class="progress-wrap">
+        <div class="progress-labels"><span>Quórum mínimo: 46</span><span id="qpct">62.2%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="qfill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Transações Blockchain</div>
+        <div class="badge badge-info">On-chain</div>
+      </div>
+      <div class="stat-big" style="color:var(--blue)" id="tx-count">143</div>
+      <div class="stat-sub">Registos imutáveis · Ethereum Sepolia</div>
+      <div class="progress-wrap">
+        <div class="progress-labels"><span>Integridade</span><span>100%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="ifill" style="width:0%;background:var(--blue)"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Sessão</div>
+        <div class="badge badge-live"><div class="badge-dot"></div>Em Curso</div>
+      </div>
+      <div class="stat-big stat-amber">Nº 47</div>
+      <div class="stat-sub">XVII Legislatura · 2026–2030</div>
+      <div style="margin-top:12px; font-size:12px; color:var(--gray-500); line-height:1.6;">
+        <div>🕑 Início: 14h00 · Hash da sessão:</div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--gray-400);">0x8f3a...b771d9</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-label">Deputados — Últimos Registos</div>
+        <span class="badge badge-info" style="font-size:10px;">Tempo real · Blockchain</span>
+      </div>
+      <div class="dep-list" id="dep-list-dashboard">
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#dbeafe;color:#1e40af">JS</div>
+          <div class="dep-info">
+            <div class="dep-name">João Silva</div>
+            <div class="dep-meta">PS · Círculo de Lisboa</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-present">✓ Presente</div>
+            <div class="dep-hash">0x9f3a...b221</div>
+          </div>
+        </div>
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#fce7f3;color:#9d174d">MC</div>
+          <div class="dep-info">
+            <div class="dep-name">Maria Costa</div>
+            <div class="dep-meta">BE · Círculo do Porto</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-present">✓ Presente</div>
+            <div class="dep-hash">0x4dc1...ff80</div>
+          </div>
+        </div>
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#fef3c7;color:#92400e">PR</div>
+          <div class="dep-info">
+            <div class="dep-name">Pedro Rocha</div>
+            <div class="dep-meta">PSD · Círculo de Braga</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-absent">✗ Ausente</div>
+            <div class="dep-hash">—</div>
+          </div>
+        </div>
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#d1fae5;color:#065f46">AF</div>
+          <div class="dep-info">
+            <div class="dep-name">Ana Figueiredo</div>
+            <div class="dep-meta">IL · Círculo de Aveiro</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-pending">⧖ Pendente</div>
+            <div class="dep-hash">—</div>
+          </div>
+        </div>
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#ede9fe;color:#4c1d95">CM</div>
+          <div class="dep-info">
+            <div class="dep-name">Carlos Mendes</div>
+            <div class="dep-meta">PCP · Círculo de Setúbal</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-present">✓ Presente</div>
+            <div class="dep-hash">0x1ab8...23f5</div>
+          </div>
+        </div>
+        <div class="dep-row">
+          <div class="dep-avatar" style="background:#fff7ed;color:#9a3412">LM</div>
+          <div class="dep-info">
+            <div class="dep-name">Luísa Marques</div>
+            <div class="dep-meta">Chega · Círculo do Norte</div>
+          </div>
+          <div class="dep-status-col">
+            <div class="dep-status s-absent">✗ Ausente</div>
+            <div class="dep-hash">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="margin-bottom:14px;">Distribuição por Grupo Parlamentar</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+            <span style="color:var(--gray-700);font-weight:500;">PS</span>
+            <span style="color:var(--gray-500);">78 / 88 presentes</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill party-bar" data-pct="88.6" style="width:0%;background:#e63946"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+            <span style="color:var(--gray-700);font-weight:500;">PSD</span>
+            <span style="color:var(--gray-500);">45 / 77 presentes</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill party-bar" data-pct="58.4" style="width:0%;background:#f4a261"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+            <span style="color:var(--gray-700);font-weight:500;">Chega</span>
+            <span style="color:var(--gray-500);">8 / 50 presentes</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill party-bar" data-pct="16" style="width:0%;background:#264653"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+            <span style="color:var(--gray-700);font-weight:500;">IL</span>
+            <span style="color:var(--gray-500);">4 / 8 presentes</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill party-bar" data-pct="50" style="width:0%;background:#457b9d"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+            <span style="color:var(--gray-700);font-weight:500;">BE / PCP / Outros</span>
+            <span style="color:var(--gray-500);">8 / 7 presentes</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill party-bar" data-pct="73" style="width:0%;background:#2d6a4f"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding:12px;background:var(--green-pale);border-radius:var(--radius-sm);border-left:3px solid var(--green-mid);">
+        <div style="font-size:12px;font-weight:600;color:var(--green-dark);margin-bottom:4px;">🔒 Garantia Blockchain</div>
+        <div style="font-size:12px;color:var(--green-dark);line-height:1.6;">Cada registo é assinado com a chave privada do deputado e gravado de forma <strong>imutável</strong> na Ethereum. Nenhum administrador pode alterar ou falsificar presenças.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ VIEW: REGISTAR ═══════════════════════════ -->
+<div id="view-registro" class="view">
+  <div class="page-header">
+    <div class="page-title">Registar Presença na Blockchain</div>
+    <div class="page-desc">O deputado autentica-se com a sua Wallet (identidade DID), assina a transação e a presença é gravada de forma imutável na Ethereum. Nenhum terceiro pode fazer isto em seu nome.</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label" style="margin-bottom:14px;">Identidade do Deputado (DID)</div>
+      <div class="wallet-box">
+        <div class="wallet-icon">J</div>
+        <div>
+          <div class="wallet-name">Dep. João Ferreira da Silva</div>
+          <div class="wallet-addr">DID: did:ethr:0x3aF9...c721</div>
+          <div class="wallet-circle">PS · Círculo de Lisboa · XVII Leg.</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;padding:12px;background:var(--blue-pale);border-radius:var(--radius-sm);border-left:3px solid var(--blue);">
+        <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px;">Sessão a registar:</div>
+        <div style="font-size:12px;color:var(--gray-700);line-height:1.7;">
+          📅 28 Abr 2026 · Período da Tarde<br>
+          🏛️ Reunião Plenária Nº 47<br>
+          🔑 Hash da sessão: <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;">0x8f3a...b771</span>
+        </div>
+      </div>
+
+      <button class="reg-btn" id="reg-btn" onclick="startRegistration()">
+        🔏 Assinar e Registar Presença
+      </button>
+
+      <div class="tx-panel" id="tx-panel">
+        <div style="font-size:12px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;margin-top:4px;">Fluxo da Transação</div>
+        <div class="tx-step">
+          <div class="tx-icon wait" id="icon1">1</div>
+          <div>
+            <div class="tx-label">Assinatura digital com chave privada</div>
+            <div class="tx-detail" id="detail1">Aguardando aprovação na wallet do deputado...</div>
+          </div>
+        </div>
+        <div class="tx-step">
+          <div class="tx-icon wait" id="icon2">2</div>
+          <div>
+            <div class="tx-label">Envio ao Smart Contract PresençaChain</div>
+            <div class="tx-detail" id="detail2">Pendente...</div>
+          </div>
+        </div>
+        <div class="tx-step">
+          <div class="tx-icon wait" id="icon3">3</div>
+          <div>
+            <div class="tx-label">Mineração e confirmação on-chain</div>
+            <div class="tx-detail" id="detail3">Pendente...</div>
+          </div>
+        </div>
+        <div class="tx-step">
+          <div class="tx-icon wait" id="icon4">4</div>
+          <div>
+            <div class="tx-label">Emissão de evento PresençaRegistada</div>
+            <div class="tx-detail" id="detail4">Pendente...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label" style="margin-bottom:14px;">Por que é isto seguro?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="padding:12px;background:var(--green-pale);border-radius:var(--radius-sm);">
+          <div style="font-size:13px;font-weight:600;color:var(--green-dark);margin-bottom:4px;">🔐 Chave Privada Única</div>
+          <div style="font-size:12px;color:var(--gray-600);line-height:1.6;">Cada deputado tem uma chave criptográfica pessoal, intransferível. Ninguém pode assinar em seu nome — ao contrário de uma password que pode ser partilhada (caso Silvano, 2018).</div>
+        </div>
+        <div style="padding:12px;background:var(--blue-pale);border-radius:var(--radius-sm);">
+          <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:4px;">🌐 Imutabilidade Blockchain</div>
+          <div style="font-size:12px;color:var(--gray-600);line-height:1.6;">Uma vez gravado, o registo não pode ser alterado por nenhum administrador, técnico ou entidade política. Qualquer cidadão pode auditar.</div>
+        </div>
+        <div style="padding:12px;background:var(--gold-pale);border-radius:var(--radius-sm);">
+          <div style="font-size:13px;font-weight:600;color:var(--gold);margin-bottom:4px;">⏱️ Timestamp Verificável</div>
+          <div style="font-size:12px;color:var(--gray-600);line-height:1.6;">O timestamp é gerado pelo próprio bloco Ethereum — não pelo servidor da AR. É matematicamente impossível falsificar o momento do registo.</div>
+        </div>
+        <div style="padding:12px;background:var(--red-pale);border-radius:var(--radius-sm);">
+          <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px;">🛡️ Proteção Anti-Replay</div>
+          <div style="font-size:12px;color:var(--gray-600);line-height:1.6;">Cada sessão tem um ID único (hash). A mesma assinatura não pode ser reutilizada noutra sessão, prevenindo ataques de replay.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ VIEW: AUDITORIA ═══════════════════════════ -->
+<div id="view-auditoria" class="view">
+  <div class="page-header">
+    <div class="page-title">Auditoria Blockchain — Registos Imutáveis</div>
+    <div class="page-desc">Todos os registos de presença estão gravados on-chain. Qualquer cidadão, jornalista ou entidade pode verificar estas transações no explorador de blocos da Ethereum, a qualquer momento.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:180px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">Contrato Implantado</div>
+        <div style="font-size:13px;font-family:'IBM Plex Mono',monospace;color:var(--blue);">0xA3f8...9dC2 (Sepolia)</div>
+      </div>
+      <div style="flex:1;min-width:160px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">Total de Registos</div>
+        <div style="font-size:13px;font-weight:600;color:var(--green-mid)" id="total-audit">3 registos</div>
+      </div>
+      <div style="flex:1;min-width:160px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">Integridade</div>
+        <div class="badge badge-ok" style="font-size:12px;">✓ 100% verificado</div>
+      </div>
+      <div style="flex:1;min-width:160px;">
+        <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">Bloco Mais Recente</div>
+        <div style="font-size:13px;font-family:'IBM Plex Mono',monospace;" id="latest-block">#7.423.892</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="audit-list" id="audit-list">
+    <div class="audit-row">
+      <div class="block-num">#7423891</div>
+      <div class="audit-body">
+        <div class="audit-name">João Silva — PS · Plenário 28/04/2026 Tarde</div>
+        <div class="audit-tx">Tx: 0x9f3a4b221dc8f712e0bc3a45...e8a1 · DID: did:ethr:0x3aF9c721</div>
+        <div class="audit-meta">
+          <span class="badge badge-ok" style="font-size:10px;">✓ verificado</span>
+          <span class="badge badge-info" style="font-size:10px;">Gas: 41.230</span>
+        </div>
+      </div>
+      <div class="audit-right">
+        <div class="audit-time">14:32:11</div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:3px;">Sessão #47</div>
+      </div>
+    </div>
+    <div class="audit-row">
+      <div class="block-num">#7423887</div>
+      <div class="audit-body">
+        <div class="audit-name">Maria Costa — BE · Plenário 28/04/2026 Tarde</div>
+        <div class="audit-tx">Tx: 0x4dc1ff80aa238b01c9a72...91c2 · DID: did:ethr:0x7bC2d834</div>
+        <div class="audit-meta">
+          <span class="badge badge-ok" style="font-size:10px;">✓ verificado</span>
+          <span class="badge badge-info" style="font-size:10px;">Gas: 41.230</span>
+        </div>
+      </div>
+      <div class="audit-right">
+        <div class="audit-time">14:30:58</div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:3px;">Sessão #47</div>
+      </div>
+    </div>
+    <div class="audit-row">
+      <div class="block-num">#7423880</div>
+      <div class="audit-body">
+        <div class="audit-name">Carlos Mendes — PCP · Plenário 28/04/2026 Manhã</div>
+        <div class="audit-tx">Tx: 0x1ab8c4dd7e904fe...23f5 · DID: did:ethr:0x9dA3b019</div>
+        <div class="audit-meta">
+          <span class="badge badge-ok" style="font-size:10px;">✓ verificado</span>
+          <span class="badge badge-info" style="font-size:10px;">Gas: 41.230</span>
+        </div>
+      </div>
+      <div class="audit-right">
+        <div class="audit-time">10:05:44</div>
+        <div style="font-size:10px;color:var(--gray-400);margin-top:3px;">Sessão #47</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ VIEW: CONTRATO ═══════════════════════════ -->
+<div id="view-contrato" class="view">
+  <div class="page-header">
+    <div class="page-title">Smart Contract — PresençaChain.sol</div>
+    <div class="page-desc">O contrato inteligente em Solidity que corre na Ethereum. Define as regras de negócio imutáveis: quem pode registar, como se valida, e o que fica gravado para sempre.</div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:14px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="card">
+        <div class="card-label" style="margin-bottom:10px;">Funções Principais</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="padding:10px;background:var(--green-pale);border-radius:var(--radius-sm);border-left:3px solid var(--green-mid);">
+            <div style="font-size:13px;font-weight:600;color:var(--green-dark);font-family:'IBM Plex Mono',monospace;">registarPresenca(sessaoId)</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px;">Grava a presença do deputado. Apenas o próprio pode chamar esta função (onlyDeputado). Emite evento imutável.</div>
+          </div>
+          <div style="padding:10px;background:var(--blue-pale);border-radius:var(--radius-sm);border-left:3px solid var(--blue);">
+            <div style="font-size:13px;font-weight:600;color:var(--blue);font-family:'IBM Plex Mono',monospace;">verificarPresenca(dep, sessaoId)</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px;">Função pública de consulta. Qualquer pessoa pode verificar se um deputado esteve presente numa sessão.</div>
+          </div>
+          <div style="padding:10px;background:var(--gold-pale);border-radius:var(--radius-sm);border-left:3px solid var(--gold);">
+            <div style="font-size:13px;font-weight:600;color:var(--gold);font-family:'IBM Plex Mono',monospace;">criarSessao(id, timestamp)</div>
+            <div style="font-size:12px;color:var(--gray-600);margin-top:4px;">Apenas a Mesa da AR pode abrir novas sessões. Cria o ID único que previne ataques de replay.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sc-wrapper">
+        <div class="sc-toolbar">
+          <div class="sc-dot" style="background:#ff5f57"></div>
+          <div class="sc-dot" style="background:#febc2e"></div>
+          <div class="sc-dot" style="background:#28c840"></div>
+          <div class="sc-title">PresencaChain.sol · Solidity 0.8.x</div>
+        </div>
+        <div class="sc-body">
+<pre><span class="cm">// SPDX-License-Identifier: MIT</span>
+<span class="kw">pragma solidity</span> <span class="num">^0.8.0</span>;
+
+<span class="kw">contract</span> <span class="fn">PresencaChain</span> {
+
+  <span class="kw">struct</span> <span class="typ">Registo</span> {
+    <span class="kw">address</span> deputadoDID;
+    <span class="kw">uint256</span> timestamp;
+    <span class="kw">bytes32</span> sessaoHash;
+    <span class="kw">bool</span>    confirmado;
+  }
+
+  <span class="kw">struct</span> <span class="typ">Sessao</span> {
+    <span class="kw">bytes32</span> id;
+    <span class="kw">uint256</span> inicio;
+    <span class="kw">bool</span>    ativa;
+  }
+
+  <span class="kw">mapping</span>(<span class="kw">address</span> => <span class="kw">bool</span>)
+    <span class="kw">public</span> deputados;
+
+  <span class="kw">mapping</span>(<span class="kw">bytes32</span> => <span class="typ">Sessao</span>)
+    <span class="kw">public</span> sessoes;
+
+  <span class="kw">mapping</span>(<span class="kw">address</span> =>
+    <span class="kw">mapping</span>(<span class="kw">bytes32</span> => <span class="typ">Registo</span>))
+    <span class="kw">public</span> registos;
+
+  <span class="kw">event</span> <span class="ev">PresencaRegistada</span>(
+    <span class="kw">address indexed</span> dep,
+    <span class="kw">bytes32 indexed</span> sessaoId,
+    <span class="kw">uint256</span> timestamp
+  );
+
+  <span class="cm">// Só o próprio dep. pode registar</span>
+  <span class="kw">modifier</span> <span class="fn2">onlyDeputado</span>() {
+    <span class="kw">require</span>(deputados[msg.sender],
+      <span class="str">"Nao autorizado"</span>);
+    _;
+  }
+
+  <span class="kw">function</span> <span class="fn2">registarPresenca</span>(
+    <span class="kw">bytes32</span> sessaoId
+  ) <span class="kw">external</span> <span class="fn2">onlyDeputado</span> {
+    <span class="kw">require</span>(sessoes[sessaoId].ativa,
+      <span class="str">"Sessao inativa"</span>);
+    <span class="kw">require</span>(
+      !registos[msg.sender][sessaoId]
+        .confirmado,
+      <span class="str">"Ja registado"</span>
+    );
+
+    registos[msg.sender][sessaoId] =
+      <span class="typ">Registo</span>({
+        deputadoDID: msg.sender,
+        timestamp: block.timestamp,
+        sessaoHash: sessaoId,
+        confirmado: <span class="kw">true</span>
+      });
+
+    <span class="kw">emit</span> <span class="ev">PresencaRegistada</span>(
+      msg.sender,
+      sessaoId,
+      block.timestamp
+    );
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ VIEW: FLUXO ═══════════════════════════ -->
+<div id="view-fluxo" class="view">
+  <div class="page-header">
+    <div class="page-title">Fluxo do Sistema & Comparação</div>
+    <div class="page-desc">Como funciona o PresençaChain de ponta a ponta, e como se compara com o sistema atual da Assembleia da República.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-label" style="margin-bottom:16px;">Fluxo Completo — Registo de Presença</div>
+    <div class="flow-container">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-icon fi-green">👤</div>
+          <div class="flow-step-title">Deputado</div>
+          <div class="flow-step-desc">Abre a DApp no tablet/telemóvel</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon fi-blue">🔑</div>
+          <div class="flow-step-title">Autenticação DID</div>
+          <div class="flow-step-desc">Assina com a sua chave privada (wallet)</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon fi-gold">📜</div>
+          <div class="flow-step-title">Smart Contract</div>
+          <div class="flow-step-desc">Valida identidade e sessão ativa</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon fi-gray">⛓️</div>
+          <div class="flow-step-title">Blockchain</div>
+          <div class="flow-step-desc">Grava registo imutável com timestamp</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-icon fi-green">🌐</div>
+          <div class="flow-step-title">Portal Público</div>
+          <div class="flow-step-desc">Qualquer cidadão pode auditar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label" style="margin-bottom:16px;">Sistema Atual vs. PresençaChain</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Aspeto</th>
+          <th>Sistema Atual (AR)</th>
+          <th>PresençaChain (Blockchain)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Autenticação</strong></td>
+          <td class="col-problem">⚠️ Login + password partilhável (caso Silvano)</td>
+          <td class="col-solution">✅ Chave privada criptográfica intransferível (DID)</td>
+        </tr>
+        <tr>
+          <td><strong>Armazenamento</strong></td>
+          <td class="col-problem">⚠️ Base de dados centralizada (alterável)</td>
+          <td class="col-solution">✅ Blockchain imutável — ninguém pode alterar</td>
+        </tr>
+        <tr>
+          <td><strong>Transparência</strong></td>
+          <td class="col-problem">⚠️ Acesso restrito ao portal da AR</td>
+          <td class="col-solution">✅ Qualquer cidadão verifica no explorador de blocos</td>
+        </tr>
+        <tr>
+          <td><strong>Timestamp</strong></td>
+          <td class="col-problem">⚠️ Gerado pelo servidor da AR</td>
+          <td class="col-solution">✅ Gerado pela rede Ethereum (impossível falsificar)</td>
+        </tr>
+        <tr>
+          <td><strong>Auditoria</strong></td>
+          <td class="col-problem">⚠️ Apenas serviços internos da AR</td>
+          <td class="col-solution">✅ Pública, permanente, resistente a censura</td>
+        </tr>
+        <tr>
+          <td><strong>Replay Attack</strong></td>
+          <td class="col-problem">⚠️ Vulnerável (mesma password)</td>
+          <td class="col-solution">✅ Cada sessão tem hash único — reutilização impossível</td>
+        </tr>
+        <tr>
+          <td><strong>Base Académica</strong></td>
+          <td>—</td>
+          <td class="col-solution">✅ Padrão ElizaEdu (TCSST 2025) adaptado</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer">
+  PresençaChain · Trabalho de Mestrado — UC Blockchain · ISCTE-IUL 2025/26 · Grupo: Julio · João · Sérgio · Sílvio · Pedro
+</div>
+
+<script>
+  // ─── TAB NAVIGATION ───
+  function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    var tabs = document.querySelectorAll('.nav-tab');
+    var map = {dashboard:0,registro:1,auditoria:2,contrato:3,fluxo:4};
+    tabs[map[name]].classList.add('active');
+  }
+
+  // ─── BLOCK COUNTER ───
+  var bn = 7423891;
+  setInterval(function() {
+    bn++;
+    var el = document.getElementById('blocknum');
+    if(el) el.textContent = bn.toLocaleString('pt-PT');
+    var lb = document.getElementById('latest-block');
+    if(lb) lb.textContent = '#' + bn.toLocaleString('pt-PT');
+  }, 12000);
+
+  // ─── ANIMATE BARS ON LOAD ───
+  setTimeout(function() {
+    var qf = document.getElementById('qfill');
+    if(qf) qf.style.width = '62.2%';
+    var iff = document.getElementById('ifill');
+    if(iff) iff.style.width = '100%';
+    document.querySelectorAll('.party-bar').forEach(function(bar) {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  }, 400);
+
+  // ─── REGISTRATION FLOW ───
+  function startRegistration() {
+    var btn = document.getElementById('reg-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ A processar...';
+    document.getElementById('tx-panel').style.display = 'block';
+
+    step(1, 'spin', '↻', null, 1200, function() {
+      step(1, 'done', '✓', '0x8f2a...d901 · Assinatura ECDSA · OK', 0, null);
+      step(2, 'spin', '↻', 'Enviando PresencaChain.registarPresenca()...', 1400, function() {
+        step(2, 'done', '✓', 'Gas usado: 42.180 · Nonce: 7 · OK', 0, null);
+        step(3, 'spin', '↻', 'Aguardando 3 confirmações na rede...', 1600, function() {
+          var txHash = '0x' + randHex(8) + '...' + randHex(4);
+          step(3, 'done', '✓', 'Tx: ' + txHash + ' · Bloco #' + (bn+1), 0, null);
+          step(4, 'spin', '↻', 'Emitindo evento PresençaRegistada...', 800, function() {
+            step(4, 'done', '✓', 'Evento emitido · Indexed: deputadoDID + sessaoId', 0, null);
+            btn.textContent = '✅ Presença registada com sucesso!';
+            btn.classList.add('success');
+            addAuditEntry(txHash);
+            updateCounter();
+          });
+        });
+      });
+    });
+  }
+
+  function step(n, cls, icon, detail, delay, cb) {
+    setTimeout(function() {
+      var ic = document.getElementById('icon' + n);
+      if(ic) { ic.className = 'tx-icon ' + cls; ic.textContent = icon; }
+      if(detail) {
+        var d = document.getElementById('detail' + n);
+        if(d) { d.textContent = detail; if(cls==='done') d.className = 'tx-detail success'; }
+      }
+      if(cb) { setTimeout(cb, delay); }
+    }, delay);
+  }
+
+  function randHex(n) {
+    var h = ''; var c = '0123456789abcdef';
+    for(var i=0;i<n*2;i++) h += c[Math.floor(Math.random()*16)];
+    return h;
+  }
+
+  function addAuditEntry(txHash) {
+    var list = document.getElementById('audit-list');
+    if(!list) return;
+    var now = new Date();
+    var time = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+    var row = document.createElement('div');
+    row.className = 'audit-row new-entry';
+    row.innerHTML = '<div class="block-num">#' + (bn+1) + '</div>' +
+      '<div class="audit-body">' +
+        '<div class="audit-name">João Ferreira da Silva — PS · Plenário 28/04/2026 Tarde</div>' +
+        '<div class="audit-tx">Tx: ' + txHash + 'e9f2...cc01 · DID: did:ethr:0x3aF9c721</div>' +
+        '<div class="audit-meta"><span class="badge badge-ok" style="font-size:10px;">✓ verificado</span><span class="badge badge-info" style="font-size:10px;">Gas: 42.180</span></div>' +
+      '</div>' +
+      '<div class="audit-right"><div class="audit-time">' + time + '</div><div style="font-size:10px;color:var(--gray-400);margin-top:3px;">Sessão #47</div></div>';
+    list.insertBefore(row, list.firstChild);
+    var tc = document.getElementById('total-audit');
+    if(tc) tc.textContent = (parseInt(tc.textContent) + 1) + ' registos';
+  }
+
+  function updateCounter() {
+    var cp = document.getElementById('count-present');
+    var tx = document.getElementById('tx-count');
+    if(cp) cp.textContent = parseInt(cp.textContent) + 1;
+    if(tx) tx.textContent = parseInt(tx.textContent) + 1;
+    var pct = Math.round((parseInt(cp.textContent) / 230) * 1000) / 10;
+    var qp = document.getElementById('qpct');
+    if(qp) qp.textContent = pct + '%';
+    var qf = document.getElementById('qfill');
+    if(qf) qf.style.width = pct + '%';
+  }
+</script>
+</body>
+</html>
